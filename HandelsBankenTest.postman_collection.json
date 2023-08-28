@@ -1,0 +1,244 @@
+{
+	"info": {
+		"_postman_id": "e713082a-6680-4a4a-b602-e2b0e419402b",
+		"name": "HandelsBankenTest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetAccounts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"var transactionLink = jsonData.accounts[0]._links.transactions.href;",
+							"var accountNumber = jsonData.accounts[0].accountId;",
+							"var tokenUsed = pm.iterationData.get(\"token\");",
+							"console.log(`token used is ${tokenUsed}`)",
+							"pm.environment.set(\"href\", transactionLink);",
+							"pm.environment.set(\"accountId\", accountNumber);",
+							"",
+							"pm.test(\"Status is 200\", ()=>{",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Assert that all properties exists\", ()=>{",
+							"    pm.expect(jsonData.accounts[0].accountId).to.not.be.null;",
+							"    pm.expect(jsonData.accounts[0].iban).to.not.be.null;",
+							"    pm.expect(jsonData.accounts[0].bban).to.not.be.null;",
+							"    pm.expect(jsonData.accounts[0].currency).to.not.be.null;",
+							"    pm.expect(jsonData.accounts[0].accountType).to.not.be.null;",
+							"    pm.expect(jsonData.accounts[0].bic).to.not.be.null;",
+							"    pm.expect(jsonData.accounts[0].clearingNumber).to.not.be.null;",
+							"    pm.expect(jsonData.accounts[0].ownerName).to.not.be.null;",
+							"    pm.expect(jsonData.accounts[0]._links.transactions.href).to.not.be.null;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"description": "Bearer MTQ0NjJkZmQ5OTM2NDE1ZTZjNGZmZjI1"
+					},
+					{
+						"key": "PSU-IP-Address",
+						"value": "{{$randomIP}}"
+					},
+					{
+						"key": "TPP-Request-ID",
+						"value": "{{$guid}}"
+					},
+					{
+						"key": "TPP-Transaction-ID",
+						"value": "{{$guid}}"
+					},
+					{
+						"key": "X-IBM-Client-Id",
+						"value": "{{Secret}}"
+					},
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://sandbox.handelsbanken.com/openbanking/psd2/v2/accounts?{{token}}",
+					"protocol": "https",
+					"host": [
+						"sandbox",
+						"handelsbanken",
+						"com"
+					],
+					"path": [
+						"openbanking",
+						"psd2",
+						"v2",
+						"accounts"
+					],
+					"query": [
+						{
+							"key": "{{token}}",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAccount",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.test(\"Status is 200\", ()=>{",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Assert that all properties exists\", ()=>{",
+							"    pm.expect(jsonData.accountId).to.not.be.null;",
+							"    pm.expect(jsonData.iban).to.not.be.null;",
+							"    pm.expect(jsonData.bban).to.not.be.null;",
+							"    pm.expect(jsonData.currency).to.not.be.null;",
+							"    pm.expect(jsonData.accountType).to.not.be.null;",
+							"    pm.expect(jsonData.bic).to.not.be.null;",
+							"    pm.expect(jsonData.clearingNumber).to.not.be.null;",
+							"    pm.expect(jsonData.ownerName).to.not.be.null;",
+							"    pm.expect(jsonData._links.transactions.href).to.not.be.null;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "PSU-IP-Address",
+						"value": "REPLACE_THIS_VALUE",
+						"disabled": true
+					},
+					{
+						"key": "TPP-Request-ID",
+						"value": "{{$guid}}"
+					},
+					{
+						"key": "TPP-Transaction-ID",
+						"value": "{{$guid}}"
+					},
+					{
+						"key": "X-IBM-Client-Id",
+						"value": "{{Secret}}"
+					},
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://sandbox.handelsbanken.com/openbanking/psd2/v2/accounts/{{accountId}}?{{token}}",
+					"protocol": "https",
+					"host": [
+						"sandbox",
+						"handelsbanken",
+						"com"
+					],
+					"path": [
+						"openbanking",
+						"psd2",
+						"v2",
+						"accounts",
+						"{{accountId}}"
+					],
+					"query": [
+						{
+							"key": "{{token}}",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAccountTransactions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"pm.test(\"Status is 200\", ()=>{",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Assert that all properties exists\", ()=>{",
+							"    pm.expect(jsonData.transactions[1]).to.have.all.keys('status', 'amount', 'ledgerDate', 'transactionDate', 'creditDebit', 'remittanceInformation', 'balance');",
+							"    pm.expect(jsonData.transactions[1].amount).to.have.keys('currency', 'content');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "PSU-IP-Address",
+						"value": "REPLACE_THIS_VALUE",
+						"disabled": true
+					},
+					{
+						"key": "TPP-Request-ID",
+						"value": "{{$guid}}"
+					},
+					{
+						"key": "TPP-Transaction-ID",
+						"value": "{{$guid}}"
+					},
+					{
+						"key": "X-IBM-Client-Id",
+						"value": "{{Secret}}"
+					},
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{href}}?{{token}}",
+					"host": [
+						"{{href}}"
+					],
+					"query": [
+						{
+							"key": "{{token}}",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
